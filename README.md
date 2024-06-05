@@ -28,8 +28,8 @@ Before you begin, ensure you have the following installed on your system:
    
    Start by cloning the repository to your local machine. Use the following command:
    ```bash
-   git clone https://github.com/your-username/your-repository.git
-   cd your-repository
+   git clone https://github.com/AaronSosaRamos/mission-flights.git
+   cd mission-flights
 
 ## Set Up a Virtual Environment (Optional but recommended)
 
@@ -51,10 +51,13 @@ pip install -r requirements.txt
 After the installation, you can start the FastAPI server using Uvicorn. Navigate to the project directory and run:
 
 ```bash
-uvicorn main:app
+uvicorn main:app --reload
 ```
 
 ## Accessing the API
 With the server running, you can access the API at `http://127.0.0.1:8000.`
 
 For interactive API documentation, visit `http://127.0.0.1:8000/docs`, where you can test the API endpoints directly from your browser.
+
+## Using the LLM
+In order to use the LLM (Chatbot), use `streamlit run sample.py`
