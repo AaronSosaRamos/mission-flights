@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Library>
+    <Books>
+        <Book id="B001">
+            <Title>Effective Java</Title>
+            <AuthorID>A001</AuthorID>
+            <GenreID>G001</GenreID>
+            <PublishedYear>2017</PublishedYear>
+            <ISBN>978-0134685991</ISBN>
+        </Book>
+        <Book id="B002">
+            <Title>Clean Code</Title>
+            <AuthorID>A002</AuthorID>
+            <GenreID>G002</GenreID>
+            <PublishedYear>2008</PublishedYear>
+            <ISBN>978-0132350884</ISBN>
+        </Book>
+        <Book id="B003">
+            <Title>Design Patterns</Title>
+            <AuthorID>A003</AuthorID>
+            <GenreID>G001</GenreID>
+            <PublishedYear>1994</PublishedYear>
+            <ISBN>978-0201633610</ISBN>
+        </Book>
+    </Books>
+    <Authors>
+        <Author id="A001">
+            <Name>Joshua Bloch</Name>
+            <Country>USA</Country>
+        </Author>
+        <Author id="A002">
+            <Name>Robert C. Martin</Name>
+            <Country>USA</Country>
+        </Author>
+        <Author id="A003">
+            <Name>Erich Gamma</Name>
+            <Country>Switzerland</Country>
+        </Author>
+    </Authors>
+    <Genres>
+        <Genre id="G001">
+            <Name>Software Engineering</Name>
+        </Genre>
+        <Genre id="G002">
+            <Name>Programming</Name>
+        </Genre>
+    </Genres>
+</Library>
