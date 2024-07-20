@@ -12,7 +12,7 @@ Key features of Gemini Flight Manager include:
 
 Designed with extensibility and scalability in mind, Gemini Flight Manager is well-suited for both educational purposes and as a foundation for more complex flight management applications.
 
-**For the purposes of Gemini Function Calling, you will only need `search_flights` and `book_flight` functions.
+**For the purposes of Gemini Function Calling, you will only need `search_flights` and `book_flight` functions.**
 
 ## Installation
 
