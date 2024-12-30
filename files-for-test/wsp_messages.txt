@@ -1,0 +1,128 @@
+25/12/2024, 8:19 p. m. - Los mensajes y las llamadas están cifrados de extremo a extremo. Nadie fuera de este chat, ni siquiera WhatsApp, puede leerlos ni escucharlos. Toca para obtener más información.
+25/12/2024, 8:19 p. m. - 
+25/12/2024, 8:19 p. m. - +51 980 827 816: Hola Aaron, soy Jhamil.
+25/12/2024, 9:45 p. m. - Aaron y Jessareth ❤️🥰: Hola Jhamil, ¿qué tal?
+25/12/2024, 9:58 p. m. - +51 980 827 816: Bienn todo tranquilo gracias, mano sabes algo de Abel o Jefrry?
+25/12/2024, 10:00 p. m. - Aaron y Jessareth ❤️🥰: Nada mano, creo que tengo el número de Jeffry
+25/12/2024, 10:01 p. m. - Aaron y Jessareth ❤️🥰: Intentaré llamarle mañana
+25/12/2024, 10:01 p. m. - Aaron y Jessareth ❤️🥰: Pero de Abel sí no sé nada. Creo que está en Sapallanga postulando a Beca 18
+25/12/2024, 10:05 p. m. - +51 980 827 816: Una reunión como los viejos tiempos.
+25/12/2024, 10:16 p. m. - Aaron y Jessareth ❤️🥰: Sería genial la verdad
+25/12/2024, 10:16 p. m. - Aaron y Jessareth ❤️🥰: Pero tendríamos que comunicarnos con ellos
+25/12/2024, 10:29 p. m. - +51 980 827 816: Claro manoo. Más bien cuentame como vas con tu tesis, tus proyectos   siempre es bueno aprender muchas cosas cada día.
+26/12/2024, 6:54 a. m. - Aaron y Jessareth ❤️🥰: Que bien mano. Sí pues, ya terminé la tesis
+26/12/2024, 6:55 a. m. - Aaron y Jessareth ❤️🥰: Solo estoy esperando el trámite de bachiller y luego proseguir con la sustentación y ya está
+26/12/2024, 7:33 a. m. - Aaron y Jessareth ❤️🥰: <Multimedia omitido>
+26/12/2024, 7:33 a. m. - Aaron y Jessareth ❤️🥰: El trabajo exige que estemos siempre actualizados con la información más importante sobre IA
+26/12/2024, 9:56 a. m. - +51 980 827 816: Wuaoo es interesante. Mano alguna vez tuviste la idea de participar en la ICPC ?
+26/12/2024, 9:57 a. m. - Aaron y Jessareth ❤️🥰: Puede ser una buena idea, pero demanda una capacidad de Programación Competitiva bien heavy
+26/12/2024, 9:57 a. m. - Aaron y Jessareth ❤️🥰: Por ahora me falta tiempo
+26/12/2024, 9:57 a. m. - Aaron y Jessareth ❤️🥰: <Multimedia omitido>
+26/12/2024, 9:57 a. m. - Aaron y Jessareth ❤️🥰: Eso se termina rápido jeje
+26/12/2024, 9:58 a. m. - +51 980 827 816: Claro eso es otro rubro cierto. Uno es competencia de algoritmos y lo que está haciendo es creación verdad?
+26/12/2024, 9:58 a. m. - Aaron y Jessareth ❤️🥰: Así es, la programación competitiva es brutal
+26/12/2024, 9:58 a. m. - Aaron y Jessareth ❤️🥰: Pero demanda mucho tiempo
+26/12/2024, 9:58 a. m. - Aaron y Jessareth ❤️🥰: Es una especialidad al final
+26/12/2024, 10:03 a. m. - +51 980 827 816: Entiendo, yo estaba aprendiendo para programación competitiva y de verdad debes estar constante para aprender los algoritmos y saber aplicarlos de manera adecuada. El tuyo es más aplicativo.
+26/12/2024, 10:03 a. m. - Aaron y Jessareth ❤️🥰: Así es, ¿qué algoritmos aprendiste?
+26/12/2024, 10:07 a. m. - +51 980 827 816: Un poco de Greedy,  Recursion, búsquedas binaria , ordenamiento rápido , ordenamiento por mezclas. Quiero aprender grafos
+26/12/2024, 10:07 a. m. - +51 980 827 816: Estructura de datos estoy aprendiendo
+26/12/2024, 10:08 a. m. - +51 980 827 816: Programación dinámica eso tbm
+26/12/2024, 10:08 a. m. - +51 980 827 816: Aún tengo un breve conocimiento sobre estos
+26/12/2024, 10:09 a. m. - Aaron y Jessareth ❤️🥰: Ciencias de la Computación, buen enfoque
+26/12/2024, 10:09 a. m. - Aaron y Jessareth ❤️🥰: Lo importante es saber el fundamento lógico y matemático
+26/12/2024, 10:09 a. m. - Aaron y Jessareth ❤️🥰: El lenguaje de programación es lo de menos
+26/12/2024, 10:10 a. m. - +51 980 827 816: https://drive.google.com/drive/folders/1fAYZI4HdUZpL1Iuj57mrlia3idjd9-S0. Estaba aprendiendo con esto y con otros vídeos
+26/12/2024, 10:10 a. m. - Aaron y Jessareth ❤️🥰: ¿Viste el BFS y DFS con Dijkstra y Bellman-Ford?
+26/12/2024, 10:11 a. m. - Aaron y Jessareth ❤️🥰: Tengo algunos códigos sobre eso que te puede ayudar
+26/12/2024, 10:11 a. m. - +51 980 827 816: Si pero de manera superficial. Sería increíble!
+26/12/2024, 10:12 a. m. - Aaron y Jessareth ❤️🥰: <Multimedia omitido>
+26/12/2024, 10:13 a. m. - Aaron y Jessareth ❤️🥰: <Multimedia omitido>
+26/12/2024, 10:13 a. m. - Aaron y Jessareth ❤️🥰: Obviamente que se usa AVL Trees y Heaps para DFS porque es parte de su algoritmo
+26/12/2024, 10:14 a. m. - +51 980 827 816: Interesante, como te pareció el tema de los grafos? O como aprendiste ?
+26/12/2024, 10:15 a. m. - Aaron y Jessareth ❤️🥰: Con las clases del MIT
+26/12/2024, 10:15 a. m. - Aaron y Jessareth ❤️🥰: Hay varios cursos en YouTube
+26/12/2024, 10:15 a. m. - Aaron y Jessareth ❤️🥰: Como te digo, lo más apropiado es saberse la lógica
+26/12/2024, 10:15 a. m. - Aaron y Jessareth ❤️🥰: ¿Cuál es la diferencia entre BFS y DFS?
+26/12/2024, 10:15 a. m. - Aaron y Jessareth ❤️🥰: Porque ambos son modelos algorítmicos aún imperfectos
+26/12/2024, 10:17 a. m. - +51 980 827 816: El bfs se mueve de manera horizontal y el dfs de manera vertical cierto ?
+26/12/2024, 10:17 a. m. - Aaron y Jessareth ❤️🥰: ¿Y por qué de esa trazabilidad?
+26/12/2024, 10:18 a. m. - +51 980 827 816: Eso si, no sé.
+26/12/2024, 10:20 a. m. - +51 980 827 816: Necesito tomar algunas clases de ello.
+26/12/2024, 10:20 a. m. - Aaron y Jessareth ❤️🥰: BFS prioriza encontrar el camino más corto usando una Cola
+26/12/2024, 10:20 a. m. - Aaron y Jessareth ❤️🥰: Mientras que DFS prioriza encontrar la existencia de ciertos caminos (No necesariamente el más corto) usando una Pila
+26/12/2024, 10:24 a. m. - +51 980 827 816: Entiendo, entonces el BFS no puede retroceder cierto.
+26/12/2024, 10:26 a. m. - +51 980 827 816: Wuaoo como terminamos hablando todo esto jajaj
+26/12/2024, 10:27 a. m. - Aaron y Jessareth ❤️🥰: En realidad, ya no es necesario porque la prioridad está en el mapping que haces a todos los posibles valores
+26/12/2024, 10:27 a. m. - Aaron y Jessareth ❤️🥰: Sí pues jeje, pero aún así hay más DS avanzados
+26/12/2024, 10:27 a. m. - Aaron y Jessareth ❤️🥰: Voy a hacer mi maestría aquí: https://cdso.utexas.edu/msai
+26/12/2024, 10:32 a. m. - +51 980 827 816: Wuao, cómo ayer te lo mencioné aprendí esto porque los medicos de ahora no están capacitados sobre estos temas. Y necesito tener alguna base de IA para poder implementar estos conocimientos en la medicina.
+26/12/2024, 10:33 a. m. - +51 980 827 816: Es una gran universidad. Creo que top en tu campo. Wuaoo hermano todo lo que estás logrando es increíble.
+26/12/2024, 10:39 a. m. - Aaron y Jessareth ❤️🥰: Esas son las nuevas tendencias, más con los agentes que se vienen en el 2025, todo se pone de patas arriba...
+26/12/2024, 10:42 a. m. - +51 980 827 816: Exacto, tanto como tú y yo debemos estar a la vanguardia de todo. Por tu parte la implementación de nuevos algoritmos , IA. Por mi parte, nuevas enfermedades, vacunas, terapias oncògenicas y todo eso
+26/12/2024, 10:44 a. m. - Aaron y Jessareth ❤️🥰: <Multimedia omitido>
+26/12/2024, 10:44 a. m. - Aaron y Jessareth ❤️🥰: Así es, la medicina puede optimizarse completamente cuando sus procesos son automatizables y, por tanto, afines a la naturaleza metodológica de la IA
+26/12/2024, 10:48 a. m. - +51 980 827 816: Wuaoo. Mientras tú vas haciendo eso. Yo ahora estoy leyendo algunos paper de patología. Cuál es el enfoque de tu chat bot ?
+26/12/2024, 10:48 a. m. - Aaron y Jessareth ❤️🥰: Innovación, tiene que ayudar en todo el ciclo de vida de la innovación
+26/12/2024, 10:55 a. m. - +51 980 827 816: Cuánto tardaste para terminar de hacer ello ?
+26/12/2024, 10:58 a. m. - Aaron y Jessareth ❤️🥰: Más o menos 45 minutos porque le colocamos Gestión de Memoria, Grafos Avanzados para LLMs, Mejora en la interacción UI/UX y planeación a otras estrategias
+26/12/2024, 11:06 a. m. - +51 980 827 816: Interesante. Tienes algun proyecto que sirva para alguna carrera de ciencias de la salud?
+26/12/2024, 11:24 a. m. - Aaron y Jessareth ❤️🥰: Sí, DL con CNN para predecir posibles anomalías cerebrales
+26/12/2024, 11:24 a. m. - Aaron y Jessareth ❤️🥰: Aún falta mucho para mejorar la generalización por inferencia
+26/12/2024, 11:25 a. m. - Aaron y Jessareth ❤️🥰: Pero con un Transformer Architecture y más capacidad computacional puede salir un buen modelo
+26/12/2024, 11:46 a. m. - +51 980 827 816: Interesante, seguiré allí aprendiendo cada día más cosas.Talvez en el 2025 podemos colaborar para hacer algún paper. Que me recomiendas que aprenda para relacionarlo con mi carrera?
+26/12/2024, 12:30 p. m. - Aaron y Jessareth ❤️🥰: <Multimedia omitido>
+26/12/2024, 12:30 p. m. - Aaron y Jessareth ❤️🥰: <Multimedia omitido>
+26/12/2024, 12:30 p. m. - Aaron y Jessareth ❤️🥰: Así es, también se lo puedo comentar a mis colegas.
+26/12/2024, 12:30 p. m. - Aaron y Jessareth ❤️🥰: Machine Learning, Deep Learning y aplicación de IA en la salud
+26/12/2024, 7:50 p. m. - +51 980 827 816: Interesante mano , necesito que me puedes enseñar algunas ideas claves de como hiciste este proyecto es fascinante enserio
+26/12/2024, 7:50 p. m. - +51 980 827 816: Claro sería genial mano
+26/12/2024, 7:51 p. m. - +51 980 827 816: Comprendo . Me recomiendas leer el libro de introducción de algoritmos?
+26/12/2024, 7:51 p. m. - +51 980 827 816: <Multimedia omitido>
+26/12/2024, 9:15 p. m. - Aaron y Jessareth ❤️🥰: Claro, hay muchos libros pero este es uno bueno
+26/12/2024, 9:15 p. m. - Aaron y Jessareth ❤️🥰: <Multimedia omitido>
+26/12/2024, 9:23 p. m. - +51 980 827 816: Recién lo comencé a leer, tu lograste leerlo mano ?
+26/12/2024, 9:24 p. m. - +51 980 827 816: Graciass, que parte es más recomendable
+26/12/2024, 10:31 p. m. - Aaron y Jessareth ❤️🥰: Todo el libro jaja
+26/12/2024, 10:31 p. m. - Aaron y Jessareth ❤️🥰: Pero prioriza codificar
+26/12/2024, 10:31 p. m. - Aaron y Jessareth ❤️🥰: A partir del entendimiento de la lógica que hay detrás
+27/12/2024, 8:25 a. m. - Aaron y Jessareth ❤️🥰: <Multimedia omitido>
+27/12/2024, 8:25 a. m. - Aaron y Jessareth ❤️🥰: <Multimedia omitido>
+27/12/2024, 8:25 a. m. - Aaron y Jessareth ❤️🥰: <Multimedia omitido>
+27/12/2024, 8:25 a. m. - Aaron y Jessareth ❤️🥰: Mira esa experiencia profesional acerca de un científico Biomédico reconocido
+27/12/2024, 8:27 a. m. - +51 980 827 816: Eso es cierto, a veces saber el porque de cada cosa suele ser confuso pero necesario porque codificar es un arte
+27/12/2024, 8:28 a. m. - +51 980 827 816: Interesante a ver lo voy a mirar
+27/12/2024, 8:31 a. m. - +51 980 827 816: Nanotecnología wuaoo. Por ejemplo para la clasificación o detecciones drogas. O para la detección de nuevos proteínas se necesita  de esos conocimientos.
+27/12/2024, 9:17 a. m. - Aaron y Jessareth ❤️🥰: Excelente, una buena práctica es encontrar referentes, imitar y mejorar lo que hacen
+27/12/2024, 10:30 p. m. - +51 980 827 816: Siii eso mano. Estuve  estudiando algunos cursos de mi carrera. Mano y que tal como te fue con cálculo?
+28/12/2024, 7:52 a. m. - Aaron y Jessareth ❤️🥰: Genial
+28/12/2024, 7:52 a. m. - Aaron y Jessareth ❤️🥰: Sigo estudiando ecuaciones diferenciales
+28/12/2024, 9:29 a. m. - +51 980 827 816: ED es un poco bravo jajaja. Yo solo necesito cálculo integral y diferencial jajaja lo demás ya no.
+28/12/2024, 9:29 a. m. - +51 980 827 816: Pero si hay el tiempo normal dispuesto aprender de todo
+28/12/2024, 4:58 p. m. - Aaron y Jessareth ❤️🥰: Jajaja, sí
+28/12/2024, 4:58 p. m. - Aaron y Jessareth ❤️🥰: Sobre todo la transformada de Laplace y Fourier
+28/12/2024, 4:58 p. m. - Aaron y Jessareth ❤️🥰: Esos son esenciales para el campo de la Medicina
+28/12/2024, 8:18 p. m. - +51 980 827 816: Estaba aprendiendo calculo con funciones especiales. Función gamma, beta, un poco de ED tbm
+29/12/2024, 2:48 p. m. - Aaron y Jessareth ❤️🥰: Sí, es lo que hemos llevado en Mate. para Ingenieros
+29/12/2024, 2:48 p. m. - Aaron y Jessareth ❤️🥰: ¿Llevaste Cálculo Vectorial?
+29/12/2024, 4:55 p. m. - +51 980 827 816: Si lo llevé pero de manera general no tan específica como los ingenieros. Tenía una duda cuál es la diferencia entre cálculo vectorial y álgebra lineal?
+29/12/2024, 4:55 p. m. - Aaron y Jessareth ❤️🥰: El Álgebra Lineal considera campos numéricos sustanciales que se utiliza en toda concepción matemática
+29/12/2024, 4:56 p. m. - Aaron y Jessareth ❤️🥰: Por tanto, aplica también para el cálculo vectorial en el sentido de la multidimensionalidad de las colecciones que almacena el Álgebra Lineal para la representación de cálculos y medidas vectoriales
+29/12/2024, 4:59 p. m. - +51 980 827 816: Comprendo, tu llevaste ambos cursos verdad?
+29/12/2024, 5:00 p. m. - Aaron y Jessareth ❤️🥰: Así es
+29/12/2024, 5:00 p. m. - Aaron y Jessareth ❤️🥰: Solo que las Universidades Peruanas no lo enseñan como realmente debería
+29/12/2024, 5:01 p. m. - +51 980 827 816: Claro, no sé si leíste el libros de Gilbert Strang. Si libro es impecable y facil de leer.
+29/12/2024, 5:01 p. m. - +51 980 827 816: Su*
+29/12/2024, 5:02 p. m. - Aaron y Jessareth ❤️🥰: Sí, aunque estuve leyendo Linear Algebra Done Right
+29/12/2024, 5:02 p. m. - Aaron y Jessareth ❤️🥰: Para la maestría en AI
+29/12/2024, 5:04 p. m. - +51 980 827 816: Eso es un libro para postgrado o maestría.
+29/12/2024, 5:05 p. m. - Aaron y Jessareth ❤️🥰: Así es, nivel doctorado
+29/12/2024, 5:05 p. m. - Aaron y Jessareth ❤️🥰: Necesario para fundamentar Topologías Matemáticas o Cálculo Real
+29/12/2024, 5:08 p. m. - +51 980 827 816: Wauo nunca he llevado una clase de topología, análisis real y compleja . Es más formalismo matemático.
+29/12/2024, 5:08 p. m. - Aaron y Jessareth ❤️🥰: Noooo, es más lógica
+29/12/2024, 5:08 p. m. - Aaron y Jessareth ❤️🥰: El formalismo matemático se da con los famosos Proofs
+29/12/2024, 5:09 p. m. - +51 980 827 816: Análisis real es full demostración
+29/12/2024, 5:09 p. m. - Aaron y Jessareth ❤️🥰: Con lógica, porque qué pretendes demostrar en el campo matemático? Cogniciones abstractas
+29/12/2024, 5:10 p. m. - Aaron y Jessareth ❤️🥰: Originado de qué? De principios causales del pensamiento. Por tanto, al ser cognitivo, tiene esencia lógica
+29/12/2024, 5:13 p. m. - +51 980 827 816: Interesante, entonces la lógica es la estructura medular de la matemática?
+29/12/2024, 6:50 p. m. - Aaron y Jessareth ❤️🥰: Así es, por eso es objetiva
