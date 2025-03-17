@@ -1,0 +1,961 @@
+<source type="github_repository"><commit>aa6321f93267aed596242de6751a524f4dfb968b</commit>
+<file name=".gcloudignore">Dockerfile
+.gitignore
+contribution.md
+diagram.png
+LICENSE
+load_env.sh
+local-start.sh
+README.md
+.env
+.pytest_cache/
+.github/
+app/__pycache__/
+__pycache__/</file>
+<file name="Dockerfile"># backend/Dockerfile
+FROM python:3.10.12
+
+WORKDIR /code
+
+COPY requirements.txt /code/requirements.txt
+
+RUN pip install --no-cache-dir -r /code/requirements.txt
+
+COPY ./app /code/app
+
+# Local development key set
+# ENV TYPES: dev, production
+# When set to dev, API Key on endpoint requests are just 'dev'
+# When set to production, API Key on endpoint requests are the actual API Key
+
+ENV PYTHONPATH=/code/app
+
+EXPOSE 8000
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]</file>
+<file name="README.md"></file>
+<file name="app.yaml">runtime: python310
+entrypoint: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+instance_class: F2
+automatic_scaling:
+  min_instances: 1
+  max_instances: 3</file>
+<file name="docker-compose.yml">version: '3.8'
+services:
+  arangodb:
+    image: arangodb/arangodb:latest
+    environment:
+      - ARANGO_ROOT_PASSWORD=password
+    ports:
+      - "8529:8529"
+    volumes:
+      - arango-data:/var/lib/arangodb3
+    networks:
+      - arangodb-network
+
+networks:
+  arangodb-network:
+    driver: bridge
+
+volumes:
+  arango-data:
+</file>
+<file name="load_env.sh">#!/bin/bash
+
+# Read each line in the .env file
+while IFS== read -r key value; do
+  # Skip blank lines and comments starting with #
+  if [[ -n "$key" &amp;&amp; ! "$key" =~ ^[[:space:]]*# ]]; then
+    # Export the variable (makes it available to the script)
+    echo "export $key=$value"
+    export "$key=$value"
+  fi
+done &lt; ".env"</file>
+<file name="local-start.sh">source ./load_env.sh
+
+echo "Starting local server\n"
+
+export LANGCHAIN_TRACING_V2=true
+export LANGCHAIN_ENDPOINT="https://api.smith.langchain.com"
+export LANGCHAIN_API_KEY=$LANGSMITH_API_KEY
+export LANGCHAIN_PROJECT=$LANGSMITH_PROJECT
+export GOOGLE_API_KEY=$GOOGLE_API_KEY
+
+#export GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/app/local-auth.json
+export ENV_TYPE=dev
+export PROJECT_ID=$GCP_PROJECT_ID
+export PYTHONPATH=$(pwd)/app
+
+echo "Loaded environment variables:"
+echo "LANGCHAIN_TRACING_V2: $LANGCHAIN_TRACING_V2"
+echo "LANGCHAIN_ENDPOINT: $LANGCHAIN_ENDPOINT"
+echo "LANGCHAIN_API_KEY: $LANGCHAIN_API_KEY"
+echo "LANGCHAIN_PROJECT: $LANGCHAIN_PROJECT"
+echo "ENV_TYPE: $ENV_TYPE"
+echo "PROJECT_ID: $PROJECT_ID"
+echo "GOOGLE_API_KEY: $GOOGLE_API_KEY"
+
+uvicorn app.main:app --host 0.0.0.0 --port 8000</file>
+<file name="requirements.txt">fastapi
+langchain
+langchain-google-genai
+langchain_core
+langchain-community
+uvicorn[standard]
+python-dotenv
+tqdm
+tiktoken
+bcrypt
+pyjwt
+python-arango
+passlib
+python-jose
+httpx
+langgraph
+tavily-python
+langchain-openai</file>
+<file name="app/.env.sample">ENV_TYPE=
+GOOGLE_API_KEY=
+PROJECT_ID=
+ARANGODB_HOST=
+ARANGODB_PORT=
+ARANGODB_USERNAME=
+ARANGODB_PASSWORD=
+ARANGODB_DATABASE=
+JWT_SECRET_KEY=
+APIS_PE_TOKEN=
+OPENAI_API_KEY=
+TAVILY_API_KEY=
+IP_GEOLOCATION_API_KEY=</file>
+<file name="app/__init__.py"></file>
+<file name="app/main.py">from fastapi import FastAPI, Request, Depends
+from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
+from app.api.router import router
+from app.api.logger import setup_logger
+from app.api.error_utilities import ErrorResponse
+
+import os
+
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv(find_dotenv())
+
+logger = setup_logger(__name__)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    logger.info(f"Initializing Application Startup")
+    logger.info(f"Successfully Completed Application Startup")
+    
+    yield
+    logger.info("Application shutdown")
+
+app = FastAPI(lifespan = lifespan)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    errors = []
+    for error in exc.errors():
+        field = " -&gt; ".join(str(loc) for loc in error['loc'])
+        message = error['msg']
+        error_detail = f"Error in field '{field}': {message}"
+        errors.append(error_detail)
+        logger.error(error_detail)  # Log the error details
+
+    error_response = ErrorResponse(status=422, message=errors)
+    return JSONResponse(
+        status_code=422,
+        content=error_response.dict()
+    )
+
+app.include_router(router)</file>
+<file name="app/api/__init__.py"></file>
+<file name="app/api/error_utilities.py">from typing import Any
+from pydantic import BaseModel
+
+class ErrorResponse(BaseModel):
+    """Base model for error responses."""
+    status: int
+    message: Any
+    
+    model_config = {
+        "arbitrary_types_allowed": True
+    }</file>
+<file name="app/api/logger.py">import logging
+import os
+
+# Global variable to track logger configuration state
+logger_configured = False
+
+def setup_logger(name=__name__):
+    """
+    Sets up a logger based on the environment.
+
+    If the environment variable ENV_TYPE is set to 'sandbox' or 'production', it configures
+    Google Cloud Logging. Otherwise, it uses the standard logging.
+
+    Parameters:
+    name (str): The name of the logger.
+
+    Returns:
+    logging.Logger: Configured logger.
+    """
+    global logger_configured
+    env_type = os.environ.get('ENV_TYPE', 'undefined')
+    project = os.environ.get('PROJECT_ID', 'undefined')
+
+    # Obtain a reference to the logger
+    logger = logging.getLogger(name)
+    
+    # Check if the logger is already configured
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        logger.setLevel(logging.DEBUG)
+        logger.propagate = True
+
+    return logger</file>
+<file name="app/api/router.py">from datetime import date
+from http.client import HTTPException
+import uuid
+from dotenv import find_dotenv, load_dotenv
+from fastapi import APIRouter, Depends, status, Request
+import httpx
+from app.api.features.chatbot import chatbot_executor
+from app.api.features.info_agent import generate_info_agent_results
+from app.api.features.security_plan import compile_security_plan_chain
+from app.api.logger import setup_logger
+from app.api.auth.auth import (
+    GeolocationArgs,
+    RegisterUser,
+    Token,
+    User,
+    create_access_token,
+    get_current_user, 
+    key_check,
+    return_db_instance
+)
+from passlib.hash import bcrypt
+import os
+from app.api.schemas.info_agent_schemas import InfoAgentArgs
+from app.api.schemas.message_schema import MessageZoneChat
+from app.api.schemas.schemas import ChatRequest, ChatResponse, Message
+from app.api.schemas.security_plan_schemas import SecurityPlanInput
+
+logger = setup_logger(__name__)
+router = APIRouter()
+
+load_dotenv(find_dotenv())
+
+@router.get("/")
+def read_root():
+    return {"Hello": "World"}
+
+APIS_PE_TOKEN = os.getenv("APIS_PE_TOKEN")
+
+@router.post("/user/register", response_model=Token)
+async def register(user: RegisterUser):
+    db = return_db_instance()
+    
+    if db["users"].find({"email": user.email}).count() &gt; 0:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="El correo ya está registrado",
+        )
+
+    try:
+        async with httpx.AsyncClient() as client:
+            dni_response = await client.get(
+                f"https://api.apis.net.pe/v2/reniec/dni?numero={user.dni}",
+                headers={"Authorization": f"Bearer {APIS_PE_TOKEN}", "Accept": "application/json"}
+            )
+            dni_response.raise_for_status()
+            dni_data = dni_response.json()
+            numero_documento = dni_data.get("numeroDocumento")
+
+            if numero_documento != user.dni:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="El DNI proporcionado no es válido o no coincide con la información registrada en RENIEC."
+                )
+    except httpx.RequestError as e:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail="Error al validar el DNI con el servicio de RENIEC."
+        )
+
+    try:
+        async with httpx.AsyncClient() as client:
+            ip_response = await client.get("https://api.ipify.org?format=json")
+            ip_response.raise_for_status()
+            ip_signup = ip_response.json().get("ip")
+    except httpx.RequestError:
+        ip_signup = "No disponible"
+
+    hashed_password = bcrypt.hash(user.password)
+    user_id = str(uuid.uuid4())
+
+    db["users"].insert({
+        "_key": user_id,
+        "dni": user.dni,
+        "firstName": user.firstName,
+        "lastName": user.lastName,
+        "phone": user.phone,
+        "email": user.email,
+        "password": hashed_password,
+        "department": user.department,
+        "province": user.province,
+        "district": user.district,
+        "addressLine1": user.addressLine1,
+        "birthDate": user.birthDate.isoformat(),
+        "termsAccepted": user.termsAccepted,
+        "ipSignup": ip_signup,
+        "signupDate": date.today().isoformat()
+    })
+
+    access_token = create_access_token(data={
+        "user_id": user_id,
+        "email": user.email,
+        "first_name": user.firstName,
+        "last_name": user.lastName,
+        "department": user.department,
+        "province": user.province,
+        "district": user.district,
+        "ip_signup": ip_signup
+    })
+
+    return {"access_token": access_token, "token_type": "bearer"}
+
+@router.post("/user/login", response_model=Token)
+async def login(user: User):
+    db = return_db_instance()
+    db_user = db["users"].find({"email": user.email}).next()
+    if not db_user or not bcrypt.verify(user.password, db_user["password"]):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Correo o contraseña incorrecta",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    access_token = create_access_token(data={"user_id": db_user["_key"], 
+                                             "email": db_user["email"], 
+                                             "first_name": db_user["firstName"], 
+                                             "last_name": db_user["lastName"],
+                                             "department": db_user["department"],
+                                             "province": db_user["province"],
+                                             "district": db_user["district"],
+                                             "ip_signup": db_user["ipSignup"]})
+    return {"access_token": access_token, "token_type": "bearer"}
+
+@router.post("/chat", response_model=ChatResponse)
+async def chat(request: ChatRequest, token_data: dict = Depends(get_current_user)):
+    user_name = request.user.fullName
+    chat_messages = request.messages
+    user_query = chat_messages[-1].payload.text
+
+    response = chatbot_executor(user_name=user_name, user_query=user_query, messages=chat_messages)
+
+    formatted_response = Message(
+        role="ai",
+        type="text",
+        payload={"text": response}
+    )
+
+    return ChatResponse(data=[formatted_response])
+
+@router.post("/security-plan")
+async def security_plan( data: SecurityPlanInput, token_data: dict = Depends(get_current_user)):
+
+    chain = compile_security_plan_chain()
+
+    result = chain.invoke({
+        "department": data.department,
+        "province": data.province,
+        "district": data.district,
+        "mainTopic": data.mainTopic,
+        "additionalDescription": data.additionalDescription
+    })
+
+    return result
+
+@router.post("/info-agent")
+async def security_plan( data: InfoAgentArgs, token_data: dict = Depends(get_current_user)):
+
+    result = generate_info_agent_results(data)
+
+    return result
+
+@router.post("/geolocation-info")
+async def obtain_geolocation_info(data: GeolocationArgs, token_data: dict = Depends(get_current_user)):
+    api_key = os.getenv("IP_GEOLOCATION_API_KEY") 
+    url = f"https://api.ipgeolocation.io/ipgeo?apiKey={api_key}&amp;ip={data.ip_signup}"
+
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.get(url)
+            response.raise_for_status() 
+            return response.json()  
+        except httpx.HTTPStatusError as e:
+            print(f"Error en la solicitud: {e}")
+            return None
+        except httpx.RequestError as e:
+            print(f"Error de conexión: {e}")
+            return None
+
+@router.post("/messages", status_code=status.HTTP_201_CREATED)
+async def save_message(message: MessageZoneChat, token_data: dict = Depends(get_current_user)):
+    db = return_db_instance()
+    messages_collection = db.collection("messages")
+    last_message = db.aql.execute(
+        """
+        FOR msg IN messages
+            FILTER msg.district == @district
+            SORT msg.order DESC
+            LIMIT 1
+            RETURN msg.order
+        """,
+        bind_vars={"district": message.district}
+    )
+
+    last_order = next(last_message, 0)  
+    message_data = message.dict()
+    message_data["order"] = last_order + 1  
+    message_data["created_at"] = message_data["created_at"].isoformat()
+    message_data["updated_at"] = message_data.get("updated_at", None)
+
+    try:
+        messages_collection.insert(message_data)
+        return {"message": "Mensaje guardado con éxito", "data": message_data}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al guardar el mensaje: {str(e)}")
+    
+@router.get("/messages/{district}", status_code=status.HTTP_200_OK)
+async def get_last_six_messages(district: str, token_data: dict = Depends(get_current_user)):
+    try:
+        db = return_db_instance()
+        cursor = db.aql.execute(
+            """
+            FOR msg IN messages
+                FILTER msg.district == @district
+                SORT msg.order DESC
+                LIMIT 6
+                RETURN msg
+            """,
+            bind_vars={"district": district}
+        )
+        
+        messages = [doc for doc in cursor][::-1]
+        
+        return {"data": messages}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al obtener los mensajes: {str(e)}")</file>
+<file name="app/api/auth/__init__.py"></file>
+<file name="app/api/auth/auth.py">from datetime import date
+from fastapi import (
+  HTTPException, 
+  Header, 
+  FastAPI, 
+  Depends, 
+  status
+)
+import uuid
+from fastapi.security import OAuth2PasswordBearer
+from pydantic import BaseModel
+from typing import Optional
+from jose import JWTError, jwt
+from arango import ArangoClient
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+ALGORITHM = "HS256"
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+def return_db_instance(): 
+  client = ArangoClient()
+  db = client.db(
+        os.getenv("ARANGODB_DATABASE"),
+        username=os.getenv("ARANGODB_USERNAME"),
+        password=os.getenv("ARANGODB_PASSWORD"),
+    )
+  return db
+
+class User(BaseModel):
+    email: str
+    password: str
+
+class RegisterUser(BaseModel):
+    dni: str
+    firstName: str
+    lastName: str
+    phone: str
+    email: str
+    password: str
+    confirmPassword: str
+    department: str
+    province: str
+    district: str
+    addressLine1: str
+    birthDate: date
+    termsAccepted: bool
+    ipSignup: Optional[str] = None
+    signupDate: Optional[str] = None
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class GeolocationArgs(BaseModel):
+    ip_signup: str
+
+def create_access_token(data: dict):
+    to_encode = data.copy()
+    return jwt.encode(to_encode, JWT_SECRET_KEY, algorithm=ALGORITHM)
+
+def verify_token(token: str):
+    try:
+        payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=[ALGORITHM])
+        user_id: str = payload.get("user_id")
+        if user_id is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Token inválido o expirado",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        return payload  
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token inválido o expirado",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+async def get_current_user(token: str = Depends(oauth2_scheme)):
+    return verify_token(token) 
+
+#from google.cloud import secretmanager
+
+# def access_secret_file(secret_id, version_id="latest"):
+#     """
+#     Access a secret file in Google Cloud Secret Manager and parse it.
+#     """
+#     project_id = os.environ.get('PROJECT_ID')
+#     client = secretmanager.SecretManagerServiceClient()
+#     name = f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
+#     response = client.access_secret_version(name=name)
+#     return response.payload.data.decode("UTF-8")
+
+# Function to ensure incoming request is from controller with key
+def key_check(api_key: str = Header(None)):
+  
+  if os.environ['ENV_TYPE'] == "production":
+    #set_key = access_secret_file("backend-access")
+    set_key = "production"
+  else:
+    set_key = "dev"
+  
+  if api_key is None or api_key != set_key:
+    raise HTTPException(status_code=401, detail="Invalid API Request Key")</file>
+<file name="app/api/features/chatbot.py">from langchain_google_genai import GoogleGenerativeAI
+from langchain.prompts import PromptTemplate
+import os
+from dotenv import load_dotenv, find_dotenv
+from app.api.schemas.schemas import ChatMessage, Message
+
+load_dotenv(find_dotenv())
+
+def read_text_file(file_path):
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
+    absolute_file_path = os.path.join(script_dir, file_path)
+    
+    with open(absolute_file_path, 'r') as file:
+        return file.read()
+
+def build_prompt():
+    """
+    Build the prompt for the model.
+    """
+    
+    template = read_text_file("prompt/chatbot-prompt.txt")
+    prompt = PromptTemplate(
+        template=template,
+        input_variables=["text"],
+    )
+    
+    return prompt
+
+
+def chatbot_executor(user_name: str, user_query: str, messages: list[Message], k=10):
+    
+    # create a memory list of last k = 3 messages
+    chat_context = [
+        ChatMessage(
+            role=message.role, 
+            type=message.type, 
+            text=message.payload.text
+        ) for message in messages[-k:]
+    ]
+
+    prompt = build_prompt()
+    
+    llm = GoogleGenerativeAI(model="gemini-1.5-flash") 
+    
+    chain =  prompt | llm
+    
+    response = chain.invoke({"chat_history": chat_context, "user_name": user_name, "user_query": user_query})
+    
+    return response
+</file>
+<file name="app/api/features/info_agent.py">from langchain_core.output_parsers import JsonOutputParser
+from langchain_core.prompts import PromptTemplate
+from langchain_google_genai import GoogleGenerativeAI
+from langchain_openai import ChatOpenAI
+from app.api.logger import setup_logger
+from langchain_community.tools.tavily_search import TavilySearchResults
+from langgraph.prebuilt import create_react_agent
+import os
+from langchain.schema import (
+       AIMessage,
+       HumanMessage,
+       SystemMessage
+)
+from dotenv import load_dotenv, find_dotenv
+
+from app.api.schemas.info_agent_schemas import InfoAgentArgs, SecurityPlanDataCollection
+
+load_dotenv(find_dotenv())
+
+logger = setup_logger(__name__)
+
+parser = JsonOutputParser(pydantic_object=SecurityPlanDataCollection)
+
+model = GoogleGenerativeAI(model="gemini-1.5-pro")
+
+def read_text_file(file_path):
+    # Get the directory containing the script file
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Combine the script directory with the relative file path
+    absolute_file_path = os.path.join(script_dir, file_path)
+    
+    with open(absolute_file_path, 'r') as file:
+        return file.read()
+    
+chat_openai_llm = ChatOpenAI(model_name="gpt-4o-mini", temperature=0.7)
+
+def generate_info_agent_results(data: InfoAgentArgs):
+    logger.info("Buscando información")
+    search = TavilySearchResults(max_results=2)
+    tools = [search]
+    agent_executor = create_react_agent(chat_openai_llm, tools)
+    ai_related_message = f"""
+    Realiza una búsqueda exhaustiva y precisa en Tavily sobre información de seguridad real y verificada para la siguiente ubicación:
+
+    - **Departamento**: {data.department}
+    - **Provincia**: {data.province}
+    - **Distrito**: {data.district}
+
+    **Descripción adicional de la búsqueda**:
+    {data.description}
+
+    Utiliza Tavily exclusivamente para brindar información actual, relevante y basada en datos reales de seguridad para esta ubicación específica. Asegúrate de no inventar información y de basarte únicamente en datos confirmados. No proporciones contenido especulativo ni sin verificación.
+
+    La respuesta debe seguir estrictamente el formato y los requisitos especificados en {parser.get_format_instructions()}.
+    """
+
+    messages = [
+        SystemMessage(content="Eres un experto en búsqueda de información de seguridad y estrategias de diseño a través de Tavily."),
+        HumanMessage(content=ai_related_message)
+    ]
+
+    result = agent_executor.invoke({'messages': messages})
+
+    logger.info(result)
+
+    parsed_result = parser.parse(result["messages"][-1].content)
+
+    logger.info(f"Resultados de la Búsqueda de Información de Seguridad: {parsed_result}")
+
+    return parsed_result</file>
+<file name="app/api/features/security_plan.py">from langchain_core.output_parsers import JsonOutputParser
+from langchain_core.prompts import PromptTemplate
+from langchain_google_genai import GoogleGenerativeAI
+from app.api.logger import setup_logger
+
+import os
+
+from dotenv import load_dotenv, find_dotenv
+from app.api.schemas.security_plan_schemas import SecurityPlan
+
+load_dotenv(find_dotenv())
+
+logger = setup_logger(__name__)
+
+parser = JsonOutputParser(pydantic_object=SecurityPlan)
+
+model = GoogleGenerativeAI(model="gemini-1.5-pro")
+
+def read_text_file(file_path):
+    # Get the directory containing the script file
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Combine the script directory with the relative file path
+    absolute_file_path = os.path.join(script_dir, file_path)
+    
+    with open(absolute_file_path, 'r') as file:
+        return file.read()
+
+prompt = PromptTemplate(
+  template=read_text_file('prompt/generate-security-plan-prompt.txt'),
+  input_variables=[
+    "department",
+    "province",
+    "district",
+    "mainTopic",
+    "additionalDescription"
+  ],
+  partial_variables={"format_instructions": parser.get_format_instructions()}
+)
+
+def compile_security_plan_chain():
+    logger.info("Compilando cadena...")
+    chain = prompt | model | parser
+    logger.info("La cadena se ha compilado satisfactoriamente")
+    return chain</file>
+<file name="app/api/features/prompt/chatbot-prompt.txt">Eres Security Shield PE, un asistente virtual amigable y profesional especializado en asesoría y soporte en temas de Seguridad Ciudadana en Perú. Security Shield PE proporciona orientación experta en temas como prevención del delito, normativas de seguridad, consejos de autoprotección y estrategias para mejorar la seguridad en comunidades peruanas.
+
+El nombre del usuario es {user_name}. El usuario ha realizado la siguiente consulta:
+
+Consulta del usuario:
+{user_query}
+
+Historial de chat:
+{chat_history}
+
+Responde en un tono informativo y conciso, ajustando el contenido a las leyes y contextos de seguridad en Perú. Utiliza un lenguaje sencillo y evita términos técnicos innecesarios. Emplea emojis cuando sea apropiado para añadir expresividad, pero sin que interfieran en la claridad de la respuesta. No brindes asesoría en temas fuera de la Seguridad Ciudadana.</file>
+<file name="app/api/features/prompt/generate-security-plan-prompt.txt">Eres un experto en seguridad ciudadana en el Perú y tu tarea es desarrollar un plan de seguridad integral basado en datos específicos para la zona indicada. Debes considerar un análisis detallado de riesgos y recomendaciones de mitigación que respondan a las necesidades locales, teniendo en cuenta la situación actual y las características de la región.
+
+**Criterios para el Plan de Seguridad**:
+
+- **Ubicación**:
+  - **Departamento**: {department}
+  - **Provincia**: {province}
+  - **Distrito**: {district}
+
+- **Tema principal**: {mainTopic}
+
+- **Descripción adicional**: {additionalDescription}
+
+**Directrices para el contenido del plan**:
+
+1. **Análisis de Riesgos**: Identifica y describe los principales riesgos de seguridad en la zona, usando datos estadísticos locales y nacionales que aporten contexto sobre incidentes de delincuencia, amenazas naturales, vulnerabilidades estructurales, y otros factores de riesgo relevantes. 
+
+2. **Medidas de Mitigación y Prevención**: Propón medidas de prevención y mitigación específicas que se adapten a los riesgos identificados. Incluye un análisis de costos potenciales para cada medida y una justificación sobre su aplicabilidad en función de los recursos y limitaciones locales.
+
+3. **Implementación y Recursos**: Enumera los recursos necesarios, tanto materiales como humanos, para llevar a cabo el plan, y sugiere un cronograma tentativo para la implementación de cada medida.
+
+4. **Estadísticas y Evidencia**: Aporta datos concretos y referencias que respalden la necesidad de cada medida propuesta. Utiliza estadísticas de seguridad de la región, informes locales y nacionales sobre criminalidad, y estudios de riesgos relevantes para la zona.
+
+5. **Rol de las Partes Involucradas**: Especifica las responsabilidades y funciones de las autoridades locales, fuerzas de seguridad y la comunidad en la ejecución del plan de seguridad, resaltando la importancia de la colaboración comunitaria para maximizar el impacto de las medidas.
+
+Debes responder como un objeto en JSON:
+{format_instructions} </file>
+<file name="app/api/schemas/info_agent_schemas.py">from pydantic import BaseModel, Field, constr
+from typing import List, Optional
+
+class InfoAgentArgs(BaseModel):
+    department: str
+    province: str
+    district: str
+    description: str
+
+class EmergencyContact(BaseModel):
+    name: str = Field(..., description="Nombre del contacto de emergencia, como 'Policía', 'Bomberos', etc.")
+    phone_number: str = Field(..., pattern=r"^\+?\d{9,15}$", description="Número de teléfono del contacto de emergencia.")
+    description: Optional[str] = Field(None, description="Descripción del contacto, como su función específica o el tipo de emergencias que cubre.")
+
+class AlarmActivation(BaseModel):
+    location: str = Field(..., description="Ubicación o zona de cobertura del botón de activación de alarmas.")
+    activation_code: Optional[str] = Field(None, description="Código de activación específico si existe.")
+    response_time: Optional[int] = Field(None, description="Tiempo estimado de respuesta en minutos tras la activación.")
+    active_status: bool = Field(..., description="Estado de activación actual del botón de alarmas.")
+
+class NeighborhoodCommunication(BaseModel):
+    platform: str = Field(..., description="Plataforma o medio de comunicación entre vecinos, como WhatsApp, Telegram, radio vecinal, etc.")
+    contact_list: List[str] = Field(..., description="Lista de nombres o identificadores de vecinos en la plataforma.")
+    description: Optional[str] = Field(None, description="Descripción del propósito o uso principal de la plataforma de comunicación.")
+
+class KeyContacts(BaseModel):
+    role: str = Field(..., description="Rol del contacto, como 'Serenazgo', 'Ambulancia', 'Familiar de Contacto', etc.")
+    name: Optional[str] = Field(None, description="Nombre de la persona o institución de contacto.")
+    phone_number: str = Field(..., pattern=r"^\+?\d{9,15}$", description="Número de teléfono del contacto clave.")
+    available_hours: Optional[str] = Field(None, description="Horario de disponibilidad del contacto, si aplica.")
+
+class HelpCenterLocation(BaseModel):
+    center_name: str = Field(..., description="Nombre del centro de ayuda, como 'Hospital Central', 'Comisaría de distrito', etc.")
+    address: str = Field(..., description="Dirección exacta del centro de ayuda.")
+    contact_number: Optional[str] = Field(None, pattern=r"^\+?\d{9,15}$", description="Número de contacto del centro de ayuda.")
+    services_provided: List[str] = Field(..., description="Servicios que ofrece el centro de ayuda, como 'atención médica', 'emergencias', 'seguridad', etc.")
+    opening_hours: Optional[str] = Field(None, description="Horario de atención del centro de ayuda.")
+
+class SecurityInformation(BaseModel):
+    title: str = Field(..., description="Título o tipo de información de seguridad, como 'Consejos de prevención de robos'.")
+    description: str = Field(..., description="Descripción detallada de la información en materia de seguridad.")
+    last_updated: Optional[str] = Field(None, description="Fecha de la última actualización de la información de seguridad.")
+    relevance: Optional[str] = Field(None, description="Relevancia o aplicabilidad de la información para la zona específica.")
+
+class SecurityPlanDataCollection(BaseModel):
+    department: str = Field(..., description="Departamento donde se realiza la recopilación de datos de seguridad.")
+    province: str = Field(..., description="Provincia donde se realiza la recopilación de datos de seguridad.")
+    district: str = Field(..., description="Distrito donde se realiza la recopilación de datos de seguridad.")
+    emergency_contacts: List[EmergencyContact] = Field(..., description="Lista de contactos de emergencia disponibles.")
+    alarm_activation_buttons: List[AlarmActivation] = Field(..., description="Lista de ubicaciones de botones de activación de alarmas y sus detalles.")
+    neighborhood_communication_channels: List[NeighborhoodCommunication] = Field(..., description="Canales de comunicación entre vecinos.")
+    key_contacts: List[KeyContacts] = Field(..., description="Lista de contactos clave de emergencia.")
+    help_centers: List[HelpCenterLocation] = Field(..., description="Ubicación de centros de ayuda y servicios de emergencia.")
+    security_information: List[SecurityInformation] = Field(..., description="Información relevante en materia de seguridad aplicable a la zona.")
+</file>
+<file name="app/api/schemas/message_schema.py">from pydantic import BaseModel, Field
+from typing import Optional
+from datetime import datetime
+import uuid
+
+class MessageZoneChat(BaseModel):
+    uuid: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    department: str
+    province: str
+    district: str
+    fullname: str
+    message_content: str
+    order: int 
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: Optional[datetime] = None
+    is_alert: bool
+</file>
+<file name="app/api/schemas/schemas.py">from enum import Enum
+from typing import Any, List, Optional
+from pydantic import BaseModel
+
+class User(BaseModel):
+    id: str
+    fullName: str
+    email: str
+    
+class Role(str, Enum):
+    human = "human"
+    ai = "ai"
+    system = "system"
+
+class MessageType(str, Enum):
+    text = "text"
+    image = "image"
+    video = "video"
+    file = "file"
+
+class MessagePayload(BaseModel):
+    text: str
+
+class Message(BaseModel):
+    role: Role
+    type: MessageType
+    timestamp: Optional[Any] = None
+    payload: MessagePayload
+
+class RequestType(str, Enum):
+    chat = "chat"
+    tool = "tool"
+
+class ChatMessage(BaseModel):
+    role: str
+    type: str
+    text: str
+
+class GenericRequest(BaseModel):
+    user: User
+    type: RequestType
+
+class ChatRequest(GenericRequest):
+    messages: List[Message]
+
+class ChatResponse(BaseModel):
+    data: List[Message]</file>
+<file name="app/api/schemas/security_plan_schemas.py">from pydantic import BaseModel, Field
+from typing import List, Optional
+
+class SecurityPlanInput(BaseModel):
+    department: str
+    province: str
+    district: str
+    mainTopic: str
+    additionalDescription: str
+
+class RiskIdentification(BaseModel):
+    risk_id: str
+    description: str = Field(..., description="Descripción detallada del riesgo identificado.")
+    impact: str = Field(..., description="Impacto potencial del riesgo en la organización.")
+    likelihood: int = Field(..., ge=1, le=5, description="Probabilidad de ocurrencia, del 1 (baja) al 5 (alta).")
+    mitigation_measures: Optional[str] = Field(None, description="Medidas sugeridas para mitigar el riesgo.")
+
+class SecurityRole(BaseModel):
+    role_id: str
+    title: str = Field(..., description="Título del rol de seguridad, como 'Administrador de Seguridad'.")
+    responsibilities: str = Field(..., description="Descripción de las responsabilidades del rol.")
+    contact_information: Optional[str] = Field(None, description="Información de contacto del responsable.")
+
+class AssetProtection(BaseModel):
+    asset_id: str
+    asset_name: str = Field(..., description="Nombre del activo, como 'Servidor de Base de Datos'.")
+    asset_type: str = Field(..., description="Tipo de activo, como 'Digital', 'Físico', etc.")
+    protection_measures: str = Field(..., description="Medidas implementadas para proteger el activo.")
+    potential_impact: str = Field(..., description="Impacto potencial de una brecha de seguridad en el activo.")
+
+class IncidentResponseProcedure(BaseModel):
+    procedure_id: str
+    title: str = Field(..., description="Título del procedimiento de respuesta, como 'Respuesta a Incidentes de Phishing'.")
+    steps: str = Field(..., description="Descripción paso a paso de las acciones a tomar durante el incidente.")
+    responsible_roles: Optional[str] = Field(None, description="Roles responsables de ejecutar el procedimiento.")
+    communication_plan: Optional[str] = Field(None, description="Plan de comunicación para notificar a los involucrados.")
+
+class TrainingPlan(BaseModel):
+    training_id: str
+    topic: str = Field(..., description="Tema de la capacitación, como 'Buenas prácticas en seguridad informática'.")
+    target_audience: str = Field(..., description="Grupo objetivo de la capacitación, como 'Todo el personal'.")
+    schedule: str = Field(..., description="Fecha o frecuencia de la capacitación.")
+    objectives: Optional[str] = Field(None, description="Objetivos de aprendizaje de la capacitación.")
+
+class SecurityPolicy(BaseModel):
+    policy_id: str
+    title: str = Field(..., description="Título de la política, como 'Política de Control de Acceso'.")
+    purpose: str = Field(..., description="Propósito de la política.")
+    scope: str = Field(..., description="Alcance de la política, especificando a quiénes aplica.")
+    enforcement: str = Field(..., description="Medidas para hacer cumplir la política.")
+    review_date: Optional[str] = Field(None, description="Fecha de revisión de la política.")
+
+class SecurityPlan(BaseModel):
+    plan_id: str
+    name: str = Field(..., description="Nombre del plan de seguridad, como 'Plan de Seguridad 2024'.")
+    risk_identifications: List[RiskIdentification] = Field(..., description="Lista de riesgos identificados.")
+    roles_and_responsibilities: List[SecurityRole] = Field(..., description="Roles de seguridad y sus responsabilidades.")
+    assets: List[AssetProtection] = Field(..., description="Lista de activos y medidas de protección.")
+    incident_response_procedures: List[IncidentResponseProcedure] = Field(..., description="Procedimientos de respuesta a incidentes.")
+    training_plan: List[TrainingPlan] = Field(..., description="Plan de capacitación para el personal.")
+    security_policies: List[SecurityPolicy] = Field(..., description="Políticas de seguridad de la organización.")
+    creation_date: str = Field(..., description="Fecha de creación del plan.")
+    revision_date: Optional[str] = Field(None, description="Fecha de revisión del plan de seguridad.")
+</file>
+</source>
