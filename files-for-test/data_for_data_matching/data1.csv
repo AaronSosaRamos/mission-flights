@@ -1,0 +1,17 @@
+Line Item,Amount
+Revenue,150000.0
+Cost of Goods Sold,60000.0
+Gross Profit,90000.0
+Research and Development Expenses,10000.0
+Marketing and Advertising Expenses,8000.0
+General and Administrative Expenses,12000.0
+Total Operating Expenses,30000.0
+Operating Income,60000.0
+Interest Income,2000.0
+Interest Expense,4000.0
+Other Income,1000.0
+Income Before Taxes,59000.0
+Income Tax Expense,10000.0
+Net Income,49000.0
+Earnings Per Share (Basic),2.45
+Earnings Per Share (Diluted),2.3

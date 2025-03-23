@@ -1,0 +1,17 @@
+Item,Value
+Total Sales,135000.0
+Direct Costs,55000.0
+Gross Margin,80000.0
+Product Development,12000.0
+Promotional Spending,7000.0
+Operations Management,11000.0
+Total Overheads,30000.0
+Earnings from Core Activities,50000.0
+Investment Income,1500.0
+Loan Interest,3500.0
+Miscellaneous Gains,1200.0
+Pre-Tax Earnings,49200.0
+Estimated Tax,8200.0
+Final Profit,41000.0
+Basic EPS,1.95
+Diluted EPS,1.85
