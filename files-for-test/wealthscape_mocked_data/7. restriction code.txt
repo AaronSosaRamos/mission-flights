@@ -1,0 +1,25 @@
+H00971   FULL        FIDELITY-SYSTEMS    RESTRICTION CODES    032825                                                                                                                                    
+FX948287532024-12-069999-12-31    BJET                                                                                 Q1ACCOUNT CLOSED                                     03NO BIZ-CLSD               
+FZ054582982025-03-242025-03-31ICS2                                                                                     D1ADD CHG<7 DAYS. NO CHECKS/CERTS>$100K. IWS SEE P&P 13RESTRICTED                
+FZ255933732025-01-179999-12-31FIRAAccount Closed (by bot)                                                              Q1ACCOUNT CLOSED                                     03NO BIZ-CLSD               
+F2203537882023-08-249999-12-31    BJET                                                                                 Q1ACCOUNT CLOSED                                     03NO BIZ-CLSD               
+F2257208732025-03-289999-12-31ICS2                                                                                     L7MAIL RETURNED BY POST OFFICE (RPO)                 06CLOS TRD OK               
+F2301701672023-12-229999-12-31    TOA                                                                                  Q1ACCOUNT CLOSED                                     03NO BIZ-CLSD               
+F2306191872025-03-242025-03-31ICS2                                                                                     D1ADD CHG<7 DAYS. NO CHECKS/CERTS>$100K. IWS SEE P&P 13RESTRICTED                
+F2313647142024-05-089999-12-31    BJET                                                                                 Q1ACCOUNT CLOSED                                     03NO BIZ-CLSD               
+F2355314232024-03-129999-12-31    BJET                                                                                 Q1ACCOUNT CLOSED                                     03NO BIZ-CLSD               
+F2377568542025-03-242025-03-31ICS2                                                                                     D1ADD CHG<7 DAYS. NO CHECKS/CERTS>$100K. IWS SEE P&P 13RESTRICTED                
+F2791928272024-09-259999-12-31ICS2                                                                                     63RESTRICTED TO GOV'T MONEY MARKET BUYS ONLY         13RESTRICTED                
+F6032866792023-02-149999-12-31ICS2                                                                                     W1529 PLAN ACCT - BLOCKED FROM TRADING NON-529 ASSETS20ETRADE BLOCK              
+F6186682882022-01-149999-12-31ICS2                                                                                     W1529 PLAN ACCT - BLOCKED FROM TRADING NON-529 ASSETS20ETRADE BLOCK              
+F6186682892022-01-149999-12-31ICS2                                                                                     W1529 PLAN ACCT - BLOCKED FROM TRADING NON-529 ASSETS20ETRADE BLOCK              
+F6186682922022-01-149999-12-31ICS2                                                                                     W1529 PLAN ACCT - BLOCKED FROM TRADING NON-529 ASSETS20ETRADE BLOCK              
+F6186695462022-01-179999-12-31ICS2                                                                                     W1529 PLAN ACCT - BLOCKED FROM TRADING NON-529 ASSETS20ETRADE BLOCK              
+F6186695502022-01-179999-12-31ICS2                                                                                     W1529 PLAN ACCT - BLOCKED FROM TRADING NON-529 ASSETS20ETRADE BLOCK              
+F6186695532022-01-179999-12-31ICS2                                                                                     W1529 PLAN ACCT - BLOCKED FROM TRADING NON-529 ASSETS20ETRADE BLOCK              
+F6270226682024-03-269999-12-31CCTA                                                                                     E4COLLATERAL ACCT -PLEDGED & RESTRICTED W/BLOCK TRADE13RESTRICTED                
+F6280694852023-06-279999-12-31    BJET                                                                                 Q1ACCOUNT CLOSED                                     03NO BIZ-CLSD               
+F6280694912022-12-169999-12-31BMDS                                                                                     31AUTO JOURNAL BLOCKED PER CUSTOMER REQUEST          18NO AUTO JNL               
+F6280694922023-01-189999-12-31    TOA                                                                                  Q1ACCOUNT CLOSED                                     03NO BIZ-CLSD               
+F6280695062022-03-039999-12-31    BJET                                                                                 Q1ACCOUNT CLOSED                                     03NO BIZ-CLSD               
+F6280695062022-01-219999-12-31IWS                                                                                      U1CLIENT DECEASED. ACCT FROZEN PENDING EST PAPERWORK 01NO BIZ     
