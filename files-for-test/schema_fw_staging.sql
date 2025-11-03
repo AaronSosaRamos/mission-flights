@@ -1,3 +1,5 @@
+DATABASE NAME = vf_fw_staging
+
 \restrict rypejkW6b29Qvq6Y56gHaRhgG3f6HP3K4fGgjnhSQze1L4oiBN7zSNc6SsBTI4F
 SET statement_timeout = 0;
 SET lock_timeout = 0;
