@@ -9,6 +9,8 @@
 
 -- Started on 2025-11-03 15:38:18 -05
 
+DATABASE NAME = vf_fw_data_warehouse
+
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
