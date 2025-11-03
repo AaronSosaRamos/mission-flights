@@ -1,3 +1,5 @@
+DATABASE NAME = vf_bd_data_warehouse
+
 \restrict FwNhDOse7jsbYyzYwg99dU0wh0bROhSLV3zz87ZGDlM0grQBP0pZezG0pIkV8kz
 SET statement_timeout = 0;
 SET lock_timeout = 0;
