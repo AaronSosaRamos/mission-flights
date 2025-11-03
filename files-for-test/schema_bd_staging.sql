@@ -1,3 +1,5 @@
+DATABASE NAME = vf_bd_staging
+
 \restrict ViwK4tHkYK8SrQopMAgn2DKyZLcd5JNSDEqQyOFcC9P387QhLvBrFCKgNcAueJM
 SET statement_timeout = 0;
 SET lock_timeout = 0;
